@@ -1,48 +1,63 @@
-import os
+from pathlib import Path
 import tkinter as tk
-import webp
-import tkinter.filedialog as filedialog
-from PIL import Image
+from tkinter import filedialog, messagebox
 
-# Define the input_file variable as a global variable
-input_file = ""
+from PIL import Image, UnidentifiedImageError
 
-def convert_webp_to_png(input_file, output_file):
-    # Open the WebP image
-    image = Image.open(input_file)
 
-    # Save the image as a PNG
-    image.save(output_file, "PNG")
+input_file = None
 
-# Create the main window
-window = tk.Tk()
-window.title("Webp to PNG Converter")
 
-# Create a label and file selector button
-label = tk.Label(text="Please select a .webp file:")
-label.pack()
+def convert_webp_to_png(input_path, output_path):
+    with Image.open(input_path) as image:
+        image.save(output_path, "PNG")
+
 
 def select_file():
     global input_file
-    input_file = tk.filedialog.askopenfilename(filetypes=[("WebP files", "*.webp")])
+    selected = filedialog.askopenfilename(
+        title="Select a WebP image",
+        filetypes=[("WebP files", "*.webp")],
+    )
+    if selected:
+        input_file = Path(selected)
+        selected_file_label.config(text=input_file.name)
 
-file_button = tk.Button(text="Select File", command=select_file)
+
+def convert():
+    if input_file is None:
+        messagebox.showwarning("No file selected", "Please select a WebP image first.")
+        return
+
+    output_folder = Path.home() / "Downloads"
+    output_file = output_folder / f"{input_file.stem}.png"
+
+    try:
+        output_folder.mkdir(parents=True, exist_ok=True)
+        convert_webp_to_png(input_file, output_file)
+    except (OSError, UnidentifiedImageError) as error:
+        messagebox.showerror("Conversion failed", str(error))
+        return
+
+    messagebox.showinfo(
+        "Conversion complete",
+        f"Saved the converted image to:\n{output_file}",
+    )
+
+
+window = tk.Tk()
+window.title("WebP to PNG Converter")
+
+prompt_label = tk.Label(window, text="Please select a .webp file:")
+prompt_label.pack()
+
+file_button = tk.Button(window, text="Select File", command=select_file)
 file_button.pack()
 
-# Create a convert button
-def convert():
-    # Set the output file path to the user's downloads folder
-    output_folder = os.path.expanduser("~/Downloads")
-    output_file = os.path.join(output_folder, os.path.basename(input_file).replace(".webp", ".png"))
+selected_file_label = tk.Label(window, text="No file selected")
+selected_file_label.pack()
 
-    # Convert the .webp file to a .png file
-    convert_webp_to_png(input_file, output_file)
-
-    # Display a message indicating that the conversion is complete
-    tk.messagebox.showinfo("Conversion Complete", f"Successfully converted {input_file} to {output_file}")
-
-convert_button = tk.Button(text="Convert", command=convert)
+convert_button = tk.Button(window, text="Convert", command=convert)
 convert_button.pack()
 
-# Run the main loop
 window.mainloop()
