@@ -1,7 +1,39 @@
-# WEBP-to-PNG
-The tkinter library in Python was used for the very basic GUI. 
-When ran, the application will display a window with a label and a button that allows the user to select a file. The user can select a file with the '.webp' extension and then press a button to convert the selected file to a '.png' file. The converted file will be saved in the user's downloads folder.
+# WebP to PNG
 
-The select_file() function is called when the user clicks the "Select File" button, and it opens a file selection dialog that allows the user to select a '.webp' file. The convert() function is called when the user clicks the "Convert" button, and it uses the convert_webp_to_png() function to convert the selected '.webp' file to a '.png' file, saving the converted file in the user's downloads folder. Finally, a message box is displayed to the user indicating that the conversion is complete.
+A small Tkinter desktop app that converts a WebP image to PNG using Pillow. Converted files are saved in the current user's Downloads folder.
 
-NOTE: Additionally, the pillow library was used to convert a WebP image to a PNG image.
+## Features
+
+- Native file picker restricted to WebP images
+- Preserves the source filename while changing the extension to `.png`
+- Creates the Downloads folder when it does not exist
+- Shows clear messages for missing selections and conversion failures
+- Requires only Pillow; no separate `webp` package is needed
+
+## Requirements
+
+- Python 3
+- Tkinter (included with most standard Python installations)
+- Pillow
+
+## Installation
+
+```bash
+git clone https://github.com/Sequence9/WEBP-to-PNG.git
+cd WEBP-to-PNG
+python -m pip install Pillow
+```
+
+## Run
+
+```bash
+python "webp to png/webp_to_png.py"
+```
+
+## Usage
+
+1. Click **Select File** and choose a `.webp` image.
+2. Click **Convert**.
+3. Find the converted PNG in your Downloads folder.
+
+If a PNG with the same name already exists, it is replaced.
