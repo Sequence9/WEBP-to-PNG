@@ -34,6 +34,12 @@ def convert():
 
     try:
         output_folder.mkdir(parents=True, exist_ok=True)
+        if output_file.is_file() and not messagebox.askyesno(
+            "Replace existing PNG?",
+            f"A PNG already exists at:\n{output_file}\n\nReplace it?",
+            default=messagebox.NO,
+        ):
+            return
         convert_webp_to_png(input_file, output_file)
     except (OSError, UnidentifiedImageError) as error:
         messagebox.showerror("Conversion failed", str(error))
