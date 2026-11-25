@@ -36,4 +36,4 @@ python "webp to png/webp_to_png.py"
 2. Click **Convert**.
 3. Find the converted PNG in your Downloads folder.
 
-If a PNG with the same name already exists, it is replaced.
+If a PNG with the same name already exists in Downloads, the app asks before replacing it. Choose **No** to keep the existing file.
